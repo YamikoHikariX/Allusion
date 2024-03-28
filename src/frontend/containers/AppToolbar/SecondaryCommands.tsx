@@ -17,12 +17,6 @@ const SecondaryCommands = observer(() => {
       menuID="__secondary-menu-options"
     >
       <MenuItem
-        icon={IconSet.SEARCH_EXTENDED}
-        onClick={uiStore.toggleAdvancedSearch}
-        text="Advanced Search"
-        accelerator={<KeyCombo combo={uiStore.hotkeyMap.advancedSearch} />}
-      />
-      <MenuItem
         icon={IconSet.HELPCENTER}
         onClick={uiStore.toggleHelpCenter}
         text="Help Center"

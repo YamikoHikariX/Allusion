@@ -81,7 +81,7 @@ const QuickSearchList = observer(() => {
         id="advanced-search-option"
         key="advanced-search"
         value="Advanced search"
-        onClick={uiStore.toggleAdvancedSearch}
+        // onClick={uiStore.toggleAdvancedSearch}
         icon={IconSet.SEARCH_EXTENDED}
       />,
     ];
@@ -92,10 +92,25 @@ const QuickSearchList = observer(() => {
       selection={selection.get()}
       onSelect={handleSelect}
       onDeselect={handleDeselect}
-      onTagClick={uiStore.toggleAdvancedSearch}
+      // onTagClick={uiStore.toggleAdvancedSearch}
       onClear={uiStore.clearSearchCriteriaList}
       renderCreateOption={renderCreateOption}
-      extraIconButtons={<SearchMatchButton disabled={selection.get().length < 2} />}
+      extraIconButtons={[
+        <SearchMatchButton key="searchMatchButton" disabled={selection.get().length < 2} />,
+        <AdvancedSearchButton key="advancedSearchButton" />,
+      ]}
+    />
+  );
+});
+
+const AdvancedSearchButton = observer(() => {
+  const { uiStore } = useStore();
+  return (
+    <IconButton
+      icon={IconSet.SEARCH_EXTENDED}
+      text="Advanced Search"
+      onClick={uiStore.toggleAdvancedSearch}
+      className="btn-icon-large"
     />
   );
 });
@@ -124,7 +139,8 @@ const CriteriaList = observer(() => {
   const rootStore = useStore();
   const { fileStore, uiStore } = rootStore;
   return (
-    <div className="input" onClick={uiStore.toggleAdvancedSearch}>
+    // <div className="input" onClick={uiStore.toggleAdvancedSearch}></div>
+    <div className="input">
       <div className="multiautocomplete-input">
         <div className="input-wrapper">
           {uiStore.searchCriteriaList.map((c, i) => (
@@ -151,6 +167,17 @@ const CriteriaList = observer(() => {
               e.preventDefault();
               // TODO: search input element keeps focus after click???
             }}
+            className="btn-icon-large"
+          />
+        ) : (
+          <> </>
+        )}
+
+        {uiStore.searchCriteriaList.length > 0 ? (
+          <IconButton
+            icon={IconSet.SEARCH_EXTENDED}
+            text="Advanced Search"
+            onClick={uiStore.toggleAdvancedSearch}
             className="btn-icon-large"
           />
         ) : (

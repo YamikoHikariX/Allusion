@@ -24,7 +24,7 @@ export interface TagSelectorProps {
   onTagClick?: (item: ClientTag) => void;
   onClear: () => void;
   disabled?: boolean;
-  extraIconButtons?: ReactElement;
+  extraIconButtons?: ReactElement[];
   renderCreateOption?: (
     inputText: string,
     resetTextBox: () => void,
