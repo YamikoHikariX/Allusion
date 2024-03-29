@@ -41,6 +41,11 @@ export const FileViewerMenuItems = ({ file }: { file: ClientFile }) => {
     uiStore.enableSlideMode();
   };
 
+  const handleCopyToClipboard = () => {
+    uiStore.selectFile(file, false);
+    uiStore.copyToClipboard();
+  };
+
   const handlePreviewWindow = () => {
     // Only clear selection if file is not already selected
     uiStore.selectFile(file, !uiStore.fileSelection.has(file));
@@ -61,6 +66,7 @@ export const FileViewerMenuItems = ({ file }: { file: ClientFile }) => {
 
   return (
     <>
+      <MenuItem onClick={handleCopyToClipboard} text="Copy" icon={IconSet.COPY} />
       <MenuItem onClick={handleViewFullSize} text="View at Full Size" icon={IconSet.SEARCH} />
       <MenuItem
         onClick={handlePreviewWindow}

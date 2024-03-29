@@ -51,6 +51,7 @@ export interface IHotkeyMap {
   // Other
   openPreviewWindow: string;
   openExternal: string;
+  copyToClipboard: string;
 }
 
 // https://blueprintjs.com/docs/#core/components/hotkeys.dialog
@@ -73,6 +74,7 @@ export const defaultHotkeyMap: IHotkeyMap = {
   advancedSearch: 'mod + shift + f',
   openPreviewWindow: 'space',
   openExternal: 'mod + enter',
+  copyToClipboard: 'mod + c',
 };
 
 /**
@@ -778,6 +780,8 @@ class UiStore {
       this.setMethodMasonryHorizontal();
     } else if (matches(hotkeyMap.viewSlide)) {
       this.toggleSlideMode();
+    } else if (matches(hotkeyMap.copyToClipboard)) {
+      this.copyToClipboard();
     } else {
       isMatch = false;
     }
