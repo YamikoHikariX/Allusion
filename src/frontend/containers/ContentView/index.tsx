@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { useStore } from '../../contexts/StoreContext';
 
 import { IconSet } from 'widgets';
+import { getThumbnailSize } from 'src/frontend/containers/ContentView/utils';
 import { MenuSubItem, Menu, useContextMenu } from 'widgets/menus';
 
 import Placeholder from './Placeholder';
@@ -80,7 +81,7 @@ const Content = observer(() => {
 
   const clearFileSelection = useAction((e: React.MouseEvent | React.KeyboardEvent) => {
     const isLayout = e.currentTarget.firstElementChild?.contains(e.target as Node);
-    if (!uiStore.isSlideMode && isLayout) {
+    if (!uiStore.isSlideMode && isLayout && !e.ctrlKey) {
       uiStore.clearFileSelection();
     }
   });
@@ -93,6 +94,22 @@ const Content = observer(() => {
       }
     }
   });
+
+  const handleScroll = useCallback(
+    (e: React.WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        const currentSize = getThumbnailSize(uiStore.thumbnailSize);
+        const step = 20;
+
+        if (e.deltaY < 0) {
+          uiStore.setThumbnailSize(currentSize + step);
+        } else {
+          uiStore.setThumbnailSize(currentSize - step);
+        }
+      }
+    },
+    [uiStore],
+  );
 
   return (
     <div
@@ -108,6 +125,7 @@ const Content = observer(() => {
       // Clear selection when clicking on the background, unless in slide mode: always needs an active image
       onClick={clearFileSelection}
       onKeyDown={handleKeyDown}
+      onWheel={handleScroll}
     >
       <Layout contentRect={contentRect} />
       <MoveFilesToTrashBin />
