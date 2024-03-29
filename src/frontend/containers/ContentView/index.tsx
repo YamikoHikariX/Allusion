@@ -40,6 +40,8 @@ const Content = observer(() => {
   const [contentRect, setContentRect] = useState({ width: 1, height: 1 });
   const container = useRef<HTMLDivElement>(null);
   const isMaximized = useIsWindowMaximized();
+  const thumbnailSize = getThumbnailSize(uiStore.thumbnailSize);
+  const thumbnailSizeStep = 20;
 
   const show = useContextMenu();
   const handleContextMenu = useAction((e: React.MouseEvent) => {
@@ -98,17 +100,14 @@ const Content = observer(() => {
   const handleScroll = useCallback(
     (e: React.WheelEvent) => {
       if (e.ctrlKey || e.metaKey) {
-        const currentSize = getThumbnailSize(uiStore.thumbnailSize);
-        const step = 20;
-
         if (e.deltaY < 0) {
-          uiStore.setThumbnailSize(currentSize + step);
+          uiStore.setThumbnailSize(thumbnailSize + thumbnailSizeStep);
         } else {
-          uiStore.setThumbnailSize(currentSize - step);
+          uiStore.setThumbnailSize(thumbnailSize - thumbnailSizeStep);
         }
       }
     },
-    [uiStore],
+    [thumbnailSize, uiStore],
   );
 
   return (
