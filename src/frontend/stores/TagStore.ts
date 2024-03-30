@@ -63,6 +63,11 @@ class TagStore {
     return Array.from(list(this.root.subTags));
   }
 
+  // Create a new computed property that returns a list of top-level tags
+  @computed get topTags(): ClientTag[] {
+    return this.tagList.filter((tag) => tag.parent === this.root);
+  }
+
   @computed get count(): number {
     return this.tagList.length;
   }

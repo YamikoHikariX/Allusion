@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { observer } from 'mobx-react-lite';
 import React, { useCallback } from 'react';
 
-import { Row } from 'widgets';
+import { Row, Tag } from 'widgets';
 import { IconSet } from 'widgets/icons';
 import { Menu, useContextMenu } from 'widgets/menus';
 import { FileTagMenuItems } from '../containers/ContentView/menu-items';
@@ -10,11 +11,38 @@ import { ClientFile } from '../entities/File';
 import { ClientTag } from '../entities/Tag';
 import { TagSelector } from './TagSelector';
 
-interface IFileTagProp {
-  file: ClientFile;
-}
+const TagCell = observer(({ file, tag }: { file: ClientFile; tag: ClientTag }) => {
+  const fileHasTag = file.tags.has(tag);
+  const tagColor = tag.color;
 
-const FileTags = observer(({ file }: IFileTagProp) => {
+  const handleTagClick = () => {
+    if (fileHasTag) {
+      file.removeTag(tag);
+    } else {
+      file.addTag(tag);
+    }
+  };
+
+  return (
+    <td
+      style={{
+        backgroundColor: fileHasTag ? 'green' : 'gray',
+        textAlign: 'center',
+        color: 'white',
+        borderRadius: '5px',
+        padding: '3px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+      }}
+      onClick={handleTagClick}
+    >
+      {tag.name}
+    </td>
+  );
+});
+
+const FileTags = ({ file }: { file: ClientFile }) => {
   const { tagStore } = useStore();
 
   const renderCreateOption = useCallback(
@@ -50,17 +78,28 @@ const FileTags = observer(({ file }: IFileTagProp) => {
   );
 
   return (
-    <TagSelector
-      disabled={file.isBroken}
-      selection={Array.from(file.tags)}
-      onClear={file.clearTags}
-      onDeselect={file.removeTag}
-      onSelect={file.addTag}
-      renderCreateOption={renderCreateOption}
-      showTagContextMenu={handleTagContextMenu}
-      multiline
-    />
+    <div style={{ overflow: 'auto', alignSelf: 'center' }}>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '0.5rem',
+                }}
+              >
+                {tagStore.tagList.map((tag) => (
+                  <TagCell key={tag.id} file={file} tag={tag} />
+                ))}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   );
-});
+};
 
 export default FileTags;
