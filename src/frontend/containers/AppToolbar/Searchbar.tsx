@@ -92,7 +92,6 @@ const QuickSearchList = observer(() => {
       selection={selection.get()}
       onSelect={handleSelect}
       onDeselect={handleDeselect}
-      // onTagClick={uiStore.toggleAdvancedSearch}
       onClear={uiStore.clearSearchCriteriaList}
       renderCreateOption={renderCreateOption}
       extraIconButtons={[
@@ -139,7 +138,6 @@ const CriteriaList = observer(() => {
   const rootStore = useStore();
   const { fileStore, uiStore } = rootStore;
   return (
-    // <div className="input" onClick={uiStore.toggleAdvancedSearch}></div>
     <div className="input">
       <div className="multiautocomplete-input">
         <div className="input-wrapper">
