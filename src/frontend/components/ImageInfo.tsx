@@ -73,6 +73,7 @@ const ImageInfo = ({ file }: ImageInfoProps) => {
   const { exifTool } = useStore();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isExifCollapsed, setIsExifCollapsed] = useState(true);
 
   const modified = usePromise(file.absolutePath, async (filePath) => {
     const stats = await fse.stat(filePath);
@@ -160,36 +161,57 @@ const ImageInfo = ({ file }: ImageInfoProps) => {
       <header>
         <h2>Information</h2>
         <Toolbar controls="file-info" isCompact>
-          {isEditing ? (
-            <>
-              <ToolbarButton
-                key="cancel"
-                icon={IconSet.CLOSE}
-                text="Cancel"
-                tooltip="Cancel changes"
-                type="reset"
-              />
-              <ToolbarButton
-                key="submit"
-                icon={IconSet.SELECT_CHECKED}
-                text="Save"
-                tooltip="Save changes"
-                type="submit"
-              />
-            </>
-          ) : (
+          {isExifCollapsed ? (
             <ToolbarButton
-              key="edit"
-              icon={IconSet.EDIT}
-              text="Edit"
-              onClick={() => setIsEditing(true)}
-              tooltip="Edit Exif data"
+              key="expand"
+              icon={IconSet.ARROW_LEFT}
+              text="Expand"
+              onClick={() => setIsExifCollapsed(false)}
+              tooltip="Expand"
               type="button"
             />
+          ) : (
+            <>
+              {isEditing ? (
+                <>
+                  <ToolbarButton
+                    key="cancel"
+                    icon={IconSet.CLOSE}
+                    text="Cancel"
+                    tooltip="Cancel changes"
+                    type="reset"
+                  />
+                  <ToolbarButton
+                    key="submit"
+                    icon={IconSet.SELECT_CHECKED}
+                    text="Save"
+                    tooltip="Save changes"
+                    type="submit"
+                  />
+                </>
+              ) : (
+                <ToolbarButton
+                  key="edit"
+                  icon={IconSet.EDIT}
+                  text="Edit"
+                  onClick={() => setIsEditing(true)}
+                  tooltip="Edit"
+                  type="button"
+                />
+              )}
+              <ToolbarButton
+                key="collapse"
+                icon={IconSet.ARROW_DOWN}
+                text="Collapse"
+                onClick={() => setIsExifCollapsed(true)}
+                tooltip="Collapse"
+                type="button"
+              />
+            </>
           )}
         </Toolbar>
       </header>
-      <table id="file-info">
+      <table id="file-info" style={{ display: isExifCollapsed ? 'none' : 'table' }}>
         <tbody>
           {Object.entries(commonMetadataLabels).map(([field, label]) => (
             <tr key={field}>

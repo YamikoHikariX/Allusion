@@ -7,7 +7,7 @@
   flex-direction: column;
 
   > * {
-    padding: 0.25rem 0.5rem;
+    padding: 0.1rem 0.2rem;
 
     // Tags section should shrink to fit its parent if the inspector is small in height
     &:last-child {
@@ -22,7 +22,7 @@
 
   header {
     text-align: center;
-    padding: 0.5rem 1rem;
+    padding: 0.1rem 1rem;
 
     // Similar behavior to toolbar in the outliner
     [role='toolbar'] {
