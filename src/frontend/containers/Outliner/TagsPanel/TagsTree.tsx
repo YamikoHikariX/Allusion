@@ -275,7 +275,13 @@ const TagItem = observer((props: ITagItemProps) => {
           }
         } else {
           // otherwise, search it
-          const query = new ClientTagSearchCriteria('tags', nodeData.id, 'containsRecursively');
+          let query;
+          if (event.altKey) {
+            query = new ClientTagSearchCriteria('tags', nodeData.id, 'contains');
+          } else {
+            query = new ClientTagSearchCriteria('tags', nodeData.id, 'containsRecursively');
+          }
+
           if (event.ctrlKey || event.metaKey) {
             uiStore.addSearchCriteria(query);
           } else {
@@ -285,11 +291,6 @@ const TagItem = observer((props: ITagItemProps) => {
       });
     },
     [nodeData, uiStore],
-  );
-
-  const handleRename = useCallback(
-    () => dispatch(Factory.enableEditing(nodeData.id)),
-    [dispatch, nodeData.id],
   );
 
   useEffect(
@@ -311,7 +312,7 @@ const TagItem = observer((props: ITagItemProps) => {
       onDrop={handleDrop}
       onContextMenu={handleContextMenu}
       onClick={handleSelect}
-      onDoubleClick={handleRename}
+      onDoubleClick={handleQuickQuery}
     >
       <span style={{ color: nodeData.viewColor }}>
         {nodeData.isHidden ? IconSet.HIDDEN : IconSet.TAG}
